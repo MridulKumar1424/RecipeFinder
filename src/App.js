@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import './App.css';
-import './Components/display.css';
-import Display from './Components/display'
-import Form from './Components/form'
+import './components/display.css';
+import Display from './components/display'
+import Form from './components/form'
 
 class App extends React.Component{
   state ={
