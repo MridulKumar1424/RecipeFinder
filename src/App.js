@@ -1,26 +1,51 @@
 import React from 'react';
-import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
+import './Components/display.css';
+import Display from './Components/display'
+import Form from './Components/form'
 
-function App() {
-  return (
+class App extends React.Component{
+  state ={
+    ingredients:[],
+    status:null
+  }
+  generateApi=(name)=>{
+    this.setState(
+      { status:"loading"}
+    )
+   axios.get("https://www.themealdb.com/api/json/v1/1/search.php?s="+name)
+   .then(res=>{
+     console.log(res)
+     if(res.data.meals===null)
+     {
+      this.setState(
+        { status:"notFound"}
+      )
+     }
+     else{
+    this.setState(
+      {
+        ingredients:res.data.meals,
+        status:null
+      }
+    )
+     }
+   }
+   )
+  
+  }
+  render(){
+    return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <Form generateApi={this.generateApi}/>
+     {this.state.status==="loading"&&<div id ="noDisplay">Loading</div>}
+     {this.state.status==="notFound"&&<div id ="notFound">No Data has been Found</div>}
+     {this.state.status===null&&<Display  ingredients={this.state.ingredients } />}
     </div>
-  );
+  
+   );
+ }
 }
 
 export default App;
